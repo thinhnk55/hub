@@ -1,8 +1,7 @@
-package com.defi.hub.deposit.momo;
+package com.defi.hub.deposit.telco;
 
 import com.defi.common.SimpleResponse;
-import com.defi.hub.deposit.momo.MomoTransaction;
-import com.defi.hub.deposit.momo.service.IMomoTransactionService;
+import com.defi.hub.deposit.telco.service.ITelcoTransactionService;
 import com.defi.hub.internal.HubClient;
 import com.defi.hub.internal.HubClientManager;
 import com.defi.util.network.OkHttpUtil;
@@ -14,14 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
 
-import static com.defi.hub.deposit.momo.service.MomoTransactionConstant.*;
+import static com.defi.hub.deposit.telco.service.TelcoTransactionConstant.*;
 
-public class MomoTransactionWorker {
-    BlockingQueue<MomoTransaction> clientCallbackQueue;
-    IMomoTransactionService transactionService;
+public class TelcoTransactionWorker {
+    BlockingQueue<TelcoTransaction> clientCallbackQueue;
+    ITelcoTransactionService transactionService;
 
 
-    public MomoTransactionWorker(IMomoTransactionService transactionService) {
+    public TelcoTransactionWorker(ITelcoTransactionService transactionService) {
         this.transactionService = transactionService;
         clientCallbackQueue = new LinkedBlockingDeque<>();
         JsonObject response = transactionService.listByState(STATE_PROVIDER_CALLBACKED);
@@ -29,7 +28,7 @@ public class MomoTransactionWorker {
             JsonArray array = response.getAsJsonArray("d");
             for(int i = 0; i < array.size(); i++){
                 JsonObject json = array.get(i).getAsJsonObject();
-                MomoTransaction transaction = new MomoTransaction(json);
+                TelcoTransaction transaction = new TelcoTransaction(json);
                 clientCallbackQueue.add(transaction);
             }
         }
@@ -43,9 +42,9 @@ public class MomoTransactionWorker {
     }
 
     private void loop() {
-        List<MomoTransaction> list = new LinkedList<>();
+        List<TelcoTransaction> list = new LinkedList<>();
         while (clientCallbackQueue.size() > 0){
-            MomoTransaction transaction = clientCallbackQueue.poll();
+            TelcoTransaction transaction = clientCallbackQueue.poll();
             list.add(transaction);
         }
         if(list.size() > 0){
@@ -53,14 +52,14 @@ public class MomoTransactionWorker {
         }
     }
 
-    private void clientCallback(List<MomoTransaction> list) {
+    private void clientCallback(List<TelcoTransaction> list) {
         for(int i = 0; i < list.size(); i++){
-            MomoTransaction transaction = list.get(i);
+            TelcoTransaction transaction = list.get(i);
             clientCallback(transaction);
         }
     }
 
-    public void clientCallback(MomoTransaction transaction) {
+    public void clientCallback(TelcoTransaction transaction) {
         HubClient client = HubClientManager.instance().getClient(transaction.client);
         String signData = new StringBuilder()
                 .append(transaction.client_transaction_id)

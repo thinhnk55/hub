@@ -1,56 +1,50 @@
-package com.defi.hub.deposit.bank;
+package com.defi.hub.deposit.telco;
 
 import com.defi.common.SimpleResponse;
-import com.defi.hub.deposit.bank.provider.BankCocoPayProvider;
-import com.defi.hub.deposit.bank.provider.IBankProvider;
-import com.defi.hub.deposit.bank.service.BankTransactionService;
-import com.defi.hub.deposit.bank.service.IBankTransactionService;
+import com.defi.hub.deposit.telco.provider.ITelcoProvider;
+import com.defi.hub.deposit.telco.provider.TelcoCocoPayProvider;
+import com.defi.hub.deposit.telco.service.ITelcoTransactionService;
+import com.defi.hub.deposit.telco.service.TelcoTransactionService;
 import com.defi.util.json.GsonUtil;
 import com.defi.util.sql.HikariClients;
 import com.google.gson.JsonObject;
 
-import static com.defi.hub.deposit.momo.service.MomoTransactionConstant.STATE_PROVIDER_CREATED;
-
-public class BankManager {
-    private static BankManager ins = null;
-    public static BankManager instance() {
+import static com.defi.hub.deposit.telco.service.TelcoTransactionConstant.STATE_PROVIDER_CREATED;
+public class TelcoManager {
+    private static TelcoManager ins = null;
+    public static TelcoManager instance() {
         if (ins == null) {
-            ins = new BankManager();
+            ins = new TelcoManager();
         }
         return ins;
     }
-    private BankManager(){
+    private TelcoManager(){
 
     }
     public void init(String configFile){
         JsonObject config = GsonUtil.getJsonObject(configFile);
         String table = config.get("table_transaction").getAsString();
-        bankList = new BankList();
-        String bank_list_file = config.get("bank_list_file").getAsString();
-        bankList.init(bank_list_file);
-        transactionService = new BankTransactionService(table, HikariClients.instance().defaulSQLJavaBridge());
+        transactionService = new TelcoTransactionService(table, HikariClients.instance().defaulSQLJavaBridge());
         JsonObject cocobayConfig = config.getAsJsonObject("provider").getAsJsonObject("cocopay");
-        provider = new BankCocoPayProvider(cocobayConfig);
-        worker = new BankTransactionWorker(transactionService, bankList, provider);
-        provider.updateSupportBank(bankList);
+        provider = new TelcoCocoPayProvider(cocobayConfig);
+        worker = new TelcoTransactionWorker(transactionService);
         worker.run();
     }
-    public IBankTransactionService transactionService;
-    IBankProvider provider;
-    BankTransactionWorker worker;
-    public BankList bankList;
+    public ITelcoTransactionService transactionService;
+    ITelcoProvider provider;
+    TelcoTransactionWorker worker;
 
-    public JsonObject createTransaction(String client_name, String client_transaction_id, String bank_code,
-                                        String client_callback_url, long request_amount) {
-        if(!bankList.supportBankCode.contains(bank_code)){
-            return SimpleResponse.createResponse(13);
-        }
-        Bank bank = bankList.bankMap.get(bank_code);
+    public JsonObject createTransaction(String client_name, String client_transaction_id,
+                                        String client_callback_url, String card_type,
+                                        String card_seri, String card_code,
+                                        long request_amount) {
         JsonObject response = transactionService.createTransaction(client_name, client_transaction_id,
-                bank, client_callback_url, request_amount);
+                client_callback_url, card_type,
+                card_seri, card_code,
+                request_amount);
         if(SimpleResponse.isSuccess(response)){
             JsonObject json = response.getAsJsonObject("d");
-            BankTransaction transaction = new BankTransaction(json);
+            TelcoTransaction transaction = new TelcoTransaction(json);
             response = sendToProvider(transaction);
             if(SimpleResponse.isSuccess(response)){
                 response = transactionService.providerCreated(transaction);
@@ -60,6 +54,7 @@ public class BankManager {
                     return SimpleResponse.createResponse(12);
                 }
             }else{
+                transactionService.providerCreateFailed(transaction);
                 return SimpleResponse.createResponse(11);
             }
         }else{
@@ -67,7 +62,7 @@ public class BankManager {
         }
     }
 
-    private JsonObject sendToProvider(BankTransaction transaction) {
+    private JsonObject sendToProvider(TelcoTransaction transaction) {
         return provider.send(transaction);
     }
 
@@ -75,11 +70,11 @@ public class BankManager {
         return provider.verifyCallback(json);
     }
 
-    public JsonObject callback(String code, String providerName, JsonObject json) {
-        JsonObject response = transactionService.getTransaction(code);
+    public JsonObject callback(long id, String providerName, JsonObject json) {
+        JsonObject response = transactionService.getTransaction(id);
         if(SimpleResponse.isSuccess(response)){
             JsonObject data = response.getAsJsonObject("d");
-            BankTransaction transaction = new BankTransaction(data);
+            TelcoTransaction transaction = new TelcoTransaction(data);
             if(transaction.state == STATE_PROVIDER_CREATED) {
                 provider.callback(transaction, json);
                 response = transactionService.providerCallbacked(transaction);

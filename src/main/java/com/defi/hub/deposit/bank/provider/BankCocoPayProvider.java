@@ -5,7 +5,6 @@ import com.defi.hub.deposit.bank.Bank;
 import com.defi.hub.deposit.bank.BankList;
 import com.defi.hub.deposit.bank.BankTransaction;
 import com.defi.hub.deposit.bank.service.BankTransactionConstant;
-import com.defi.hub.deposit.momo.service.MomoTransactionConstant;
 import com.defi.util.json.GsonUtil;
 import com.defi.util.log.DebugLogger;
 import com.defi.util.network.OkHttpUtil;
@@ -91,6 +90,8 @@ public class BankCocoPayProvider implements IBankProvider{
             transaction.update_time = System.currentTimeMillis();
             return SimpleResponse.createResponse(0);
         }else{
+            transaction.provider = username;
+            transaction.hub_callback_url = hub_callback_url;
             transaction.error = BankTransactionConstant.STATE_PROVIDER_CREATED;
             transaction.provider_transaction_response = response;
             transaction.update_time = System.currentTimeMillis();
@@ -130,11 +131,11 @@ public class BankCocoPayProvider implements IBankProvider{
             transaction.provider_transaction_id = trans_id;
         }
         transaction.message = message;
-        transaction.state = MomoTransactionConstant.STATE_PROVIDER_CALLBACKED;
+        transaction.state = BankTransactionConstant.STATE_PROVIDER_CALLBACKED;
         transaction.provider_callback_data = json;
         transaction.create_time = System.currentTimeMillis();
         if(status != 1){
-            transaction.error = 1;
+            transaction.error = BankTransactionConstant.ERROR_TRANSACTION_FAILED;
         }
     }
 

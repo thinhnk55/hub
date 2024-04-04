@@ -36,7 +36,7 @@ public class MomoManager {
     MomoTransactionWorker worker;
 
     public JsonObject createTransaction(String client_name, String client_transaction_id,
-                                        String client_callback_url, int request_amount) {
+                                        String client_callback_url, long request_amount) {
         JsonObject response = transactionService.createTransaction(client_name, client_transaction_id, client_callback_url, request_amount);
         if(SimpleResponse.isSuccess(response)){
             JsonObject json = response.getAsJsonObject("d");

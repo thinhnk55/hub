@@ -14,10 +14,41 @@ public class HubTest {
     public static void main(String[] args) {
         try {
             initConfig();
-            bankCallbackTest();
+            cardCallbackTest();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void cardCallbackTest() {
+        String api_key = "zgaxytcobujri5l78qdpf3k691m2es4v";
+        String request_id = "12";
+        int status = 1;
+        String card_seri = "";
+        String card_code = "";
+        String tran_id = "";
+        long amount = 100000;
+
+        String signData = new StringBuilder()
+                .append(api_key)
+                .append(request_id)
+                .append(card_code)
+                .toString();
+        String sign = StringUtil.md5(signData);
+
+        String url = new StringBuilder("http://127.0.0.1:8080/hb/cocobay/card")
+                .append("?request_id=").append(request_id)
+                .append("&status=").append(status)
+                .append("&card_seri=").append(card_seri)
+                .append("&card_code=").append(card_code)
+                .append("&tran_id=").append(card_code)
+                .append("&amount=").append(amount)
+                .append("&real_amount=").append(amount)
+                .append("&message=").append("")
+                .append("&signature=").append(sign)
+                .toString();
+        JsonObject response = OkHttpUtil.get(url);
+        DebugLogger.logger.info("{}", response);
     }
 
     private static void bankCallbackTest() {

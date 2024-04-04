@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS momo_transaction
     create_time BIGINT,
     update_time BIGINT  DEFAULT 0
 );
-CREATE UNIQUE INDEX momo_transaction_client_index ON momo_transaction (client, client_transaction_id ASC);
-CREATE UNIQUE INDEX momo_transaction_provider_index ON momo_transaction (provider, provider_transaction_id ASC);
-CREATE INDEX momo_transaction_message_index ON momo_transaction (message ASC);
+CREATE UNIQUE INDEX momo_transaction_client_index ON momo_transaction (client, client_transaction_id);
+CREATE UNIQUE INDEX momo_transaction_provider_index ON momo_transaction (provider, provider_transaction_id);
+CREATE INDEX momo_transaction_message_index ON momo_transaction (message);
+CREATE INDEX momo_transaction_state_error_index ON momo_transaction (state, error);
+CREATE INDEX momo_transaction_create_time_index ON momo_transaction (create_time);

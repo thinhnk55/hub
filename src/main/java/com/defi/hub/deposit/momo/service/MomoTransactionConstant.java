@@ -7,6 +7,6 @@ public class MomoTransactionConstant {
     public static final int STATE_CLIENT_CALLBACKED_SUCCESS                   = 3;
     public static final int STATE_CLIENT_CALLBACKED_CANCEL                    = 4;
 
-    public static final int ERROR_PROVIDER_CREATED_FAILED                     = 1;
+    public static final int ERROR_TRANSACTION_FAILED                          = 1;
     public static int EXPIRED_TIME_PERIOD                                     = 6*3600*1000;
 }

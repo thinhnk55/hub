@@ -23,7 +23,7 @@ public class BankTransactionService implements IBankTransactionService{
 
     @Override
     public JsonObject createTransaction(String client, String client_transaction_id, Bank bank,
-                                        String client_callback_url, int request_amount) {
+                                        String client_callback_url, long request_amount) {
         try{
             String code = generateCode();
             try{
@@ -152,10 +152,11 @@ public class BankTransactionService implements IBankTransactionService{
             transaction.update_time = System.currentTimeMillis();
             String query = new StringBuilder("UPDATE ")
                     .append(table)
-                    .append(" SET provider_callback_data = ?, state = ?, error = ?, update_time = ?")
+                    .append(" SET provider = ?, provider_callback_data = ?, state = ?, error = ?, update_time = ?")
                     .append(" WHERE code = ?")
                     .toString();
-            int x = bridge.update(query, transaction.provider_callback_data,
+            int x = bridge.update(query, transaction.provider,
+                    transaction.provider_callback_data,
                     transaction.state, transaction.error,
                     transaction.update_time, transaction.code);
             if(x == 0) {

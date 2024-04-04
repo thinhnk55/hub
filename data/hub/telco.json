@@ -1,0 +1,11 @@
+{
+  "table_transaction": "telco_transaction",
+  "provider": {
+    "cocopay": {
+      "username": "cocopay",
+      "api_key": "zgaxytcobujri5l78qdpf3k691m2es4v",
+      "provider_submit_url": "http://sieutoc.club/api/cardcharging2",
+      "hub_callback_url": "http://api.apifor1.com/hb/cocobay/card"
+    }
+  }
+}

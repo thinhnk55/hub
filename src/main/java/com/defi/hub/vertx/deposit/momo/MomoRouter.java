@@ -24,7 +24,7 @@ public class MomoRouter {
             }
             String client_transaction_id = rc.request().getParam("request_id");
             String client_callback_url = rc.request().getParam("callback_url");
-            int request_amount = Integer.parseInt(rc.request().getParam("amount"));
+            long request_amount = Long.parseLong(rc.request().getParam("amount"));
             String sign = rc.request().getParam("sign");
             String signData = StringUtil.md5(new StringBuilder(client_transaction_id)
                     .append(request_amount)

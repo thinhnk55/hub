@@ -2,6 +2,7 @@ package com.defi.hub.launcher;
 
 import com.defi.hub.deposit.bank.BankManager;
 import com.defi.hub.deposit.momo.MomoManager;
+import com.defi.hub.deposit.telco.TelcoManager;
 import com.defi.hub.internal.HubClientManager;
 import com.defi.hub.vertx.HubVerticle;
 import com.defi.hub.vertx.HubVertx;
@@ -27,6 +28,7 @@ public class HubLauncher {
     private static void initLogic() {
         BankManager.instance().init("data/hub/bank.json");
         MomoManager.instance().init("data/hub/momo.json");
+        TelcoManager.instance().init("data/hub/telco.json");
         HubClientManager.instance().init("hub_client");
     }
 

@@ -29,4 +29,6 @@ CREATE TABLE IF NOT EXISTS bank_transaction
 );
 CREATE UNIQUE INDEX bank_transaction_client_index ON bank_transaction (client, client_transaction_id ASC);
 CREATE UNIQUE INDEX bank_transaction_provider_index ON bank_transaction (provider, provider_transaction_id ASC);
-CREATE INDEX bank_transaction_message_index ON bank_transaction (message ASC);
+CREATE INDEX bank_transaction_message_index ON bank_transaction (message);
+CREATE INDEX bank_transaction_state_error_index ON bank_transaction (state, error);
+CREATE INDEX bank_transaction_create_time_index ON bank_transaction (create_time);

@@ -1,9 +1,10 @@
-package com.defi.hub.deposit.momo;
+package com.defi.hub.deposit.telco;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class MomoTransaction {
-    public String code;
+public class TelcoTransaction {
+    public long id;
     public String client;
     public String client_transaction_id;
     public String client_callback_url;
@@ -14,27 +15,19 @@ public class MomoTransaction {
     public String provider;
     public JsonObject provider_transaction_response;
     public String provider_transaction_id;
-    public String momo_transaction_id;
-    public String name;
-    public String phone;
-    public String message;
+    public String card_type;
+    public String card_seri;
+    public String card_code;
     public int state;
     public int error;
     public String hub_callback_url;
     public JsonObject provider_callback_data;
-    public long expired_time;
     public long create_time;
     public long update_time;
+    public long expired_time;
 
-    public MomoTransaction(String clientName, String clientTransactionId, String clientCallbackUrl, int requestAmount) {
-        this.client = clientName;
-        this.client_transaction_id = clientTransactionId;
-        this.client_callback_url = clientCallbackUrl;
-        this.request_amount = requestAmount;
-    }
-
-    public MomoTransaction(JsonObject data) {
-        this.code = data.get("code").getAsString();
+    public TelcoTransaction(JsonObject data) {
+        this.id = data.get("id").getAsLong();
         this.client = data.get("client").getAsString();
         this.client_transaction_id = data.get("client_transaction_id").getAsString();
         this.client_callback_url = data.get("client_callback_url").getAsString();
@@ -44,11 +37,10 @@ public class MomoTransaction {
         this.client_callback_response = data.getAsJsonObject("client_callback_response");
         this.provider = data.get("provider").getAsString();
         this.provider_transaction_response = data.getAsJsonObject("provider_transaction_response");
-        this.provider_transaction_id = data.get("provider_transaction_id").getAsString();
-        this.momo_transaction_id = data.get("momo_transaction_id").getAsString();
-        this.name = data.get("name").getAsString();
-        this.phone = data.get("phone").getAsString();
-        this.message = data.get("message").getAsString();
+        this.provider_transaction_id = data.get("provider_transaction_id").isJsonNull()? null : data.get("provider_transaction_id").getAsString();
+        this.card_type = data.get("card_type").getAsString();
+        this.card_seri = data.get("card_seri").getAsString();
+        this.card_code = data.get("card_code").getAsString();
         this.state = data.get("state").getAsInt();
         this.error = data.get("error").getAsInt();
         this.hub_callback_url = data.get("hub_callback_url").getAsString();
@@ -60,9 +52,7 @@ public class MomoTransaction {
 
     public JsonObject toCreateSuccessJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("name", name);
-        json.addProperty("phone", phone);
-        json.addProperty("message", message);
+        json.addProperty("request_id", client_transaction_id);
         json.addProperty("expired_time", expired_time);
         return json;
     }

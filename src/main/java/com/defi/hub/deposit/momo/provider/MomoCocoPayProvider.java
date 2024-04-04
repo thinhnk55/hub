@@ -62,7 +62,9 @@ public class MomoCocoPayProvider implements IMomoProvider {
             transaction.update_time = System.currentTimeMillis();
             return SimpleResponse.createResponse(0);
         }else{
-            transaction.error = MomoTransactionConstant.ERROR_PROVIDER_CREATED_FAILED;
+            transaction.provider = username;
+            transaction.hub_callback_url = hub_callback_url;
+            transaction.error = MomoTransactionConstant.ERROR_TRANSACTION_FAILED;
             transaction.provider_transaction_response = response;
             transaction.update_time = System.currentTimeMillis();
             return SimpleResponse.createResponse(10);
@@ -105,7 +107,7 @@ public class MomoCocoPayProvider implements IMomoProvider {
         }
         transaction.create_time = System.currentTimeMillis();
         if(status == -1){
-            transaction.error = 1;
+            transaction.error = MomoTransactionConstant.ERROR_TRANSACTION_FAILED;
         }
     }
 }

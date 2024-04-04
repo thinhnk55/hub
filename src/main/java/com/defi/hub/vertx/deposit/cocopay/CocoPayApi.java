@@ -14,5 +14,7 @@ public class CocoPayApi {
                 .handler(CocoPayRouter::momoCallback);
         router.get(HubVertx.instance().getPath("/cocobay/bank"))
                 .handler(CocoPayRouter::bankCallback);
+        router.get(HubVertx.instance().getPath("/cocobay/card"))
+                .handler(CocoPayRouter::cardCallback);
     }
 }
