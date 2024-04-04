@@ -1,0 +1,5 @@
+{
+  "name": "hub",
+  "url_prefix": "/hb",
+  "http_port": 8080
+}

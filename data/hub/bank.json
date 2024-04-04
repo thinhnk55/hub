@@ -1,0 +1,63 @@
+{
+  "table_transaction": "bank_transaction",
+  "bank_list_file": "data/hub/vietqr_bank_list.json",
+  "provider": {
+    "cocopay": {
+      "username": "cocopay",
+      "api_key": "zgaxytcobujri5l78qdpf3k691m2es4v",
+      "provider_submit_url": "http://tt.sieutoc.club/api3/requestPayment",
+      "provider_list_bank_url": "http://tt.sieutoc.club/api3/listBank",
+      "hub_callback_url": "http://api.apifor1.com/hb/cocobay/bank",
+      "bank_mapping": [
+        {
+          "provider_code": "VCB",
+          "hub_code":"VCB"
+        },
+        {
+          "provider_code": "VTB",
+          "hub_code":"ICB"
+        },
+        {
+          "provider_code": "TCB",
+          "hub_code":"TCB"
+        },
+        {
+          "provider_code": "VIB",
+          "hub_code":"VIB"
+        },
+        {
+          "provider_code": "BIDV",
+          "hub_code":"BIDV"
+        },
+        {
+          "provider_code": "SHB",
+          "hub_code":"SHB"
+        },
+        {
+          "provider_code": "DAB",
+          "hub_code":"DOB"
+        },
+        {
+          "provider_code": "ACB",
+          "hub_code":"ACB"
+        },
+        {
+          "provider_code": "TPB",
+          "hub_code":"TPB"
+        },
+        {
+          "provider_code": "EXB",
+          "hub_code":"EIB"
+        },
+        {
+          "provider_code": "SAC",
+          "hub_code":"STB"
+        },
+        {
+          "provider_code": "SCB",
+          "hub_code":"SCB"
+        }
+      ]
+    }
+  }
+}

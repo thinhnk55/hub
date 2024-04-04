@@ -1,0 +1,12 @@
+{
+  "table_transaction": "momo_transaction",
+  "provider": {
+    "cocopay": {
+      "username": "cocopay",
+      "api_key": "zgaxytcobujri5l78qdpf3k691m2es4v",
+      "provider_submit_url": "http://tt.sieutoc.club/api3/requestPayment",
+      "provider_list_bank_url": "http://tt.sieutoc.club/api3/listBank",
+      "hub_callback_url": "http://api.apifor1.com/hb/cocobay/momo"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "name": "hub",
+        "jdbcUrl": "jdbc:mariadb://139.180.210.47:3306/hub",
+        "dataSource.database": "hub",
+        "dataSource.user": "hub",
+        "dataSource.password": "AMLU%$09378fsrk"
+    }
+]
